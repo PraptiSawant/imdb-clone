@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import Pagination from "./Pagination";
 
-function Movies() {
+function Movies({ addToWatchList, removeFromWatchList, watchList }) {
   const [movies, setMovies] = useState([]);
   const [pageNo, setPageNo] = useState(1);
 
@@ -30,7 +30,7 @@ function Movies() {
       <div className="text-2xl m-2 font-bold text-center mb-5">Trending Movies</div>
       <div className="flex flex-row flex-wrap justify-around gap-8">
         {movies.map((movie) => (
-          <MovieCard key={movie.id} posterPath={movie.poster_path} name={movie.original_title} />
+          <MovieCard key={movie.id} posterPath={movie.poster_path} name={movie.original_title} addToWatchList={addToWatchList} removeFromWatchList={removeFromWatchList} movie={movie} watchList={watchList} />
         ))}
       </div>
 

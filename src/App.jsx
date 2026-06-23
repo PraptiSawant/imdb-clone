@@ -7,6 +7,17 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Banner from "./components/Banner";
 
 function App() {
+  let [watchList, setWatchList] = useState([]);
+
+  function addToWatchList(movie) {
+    setWatchList([...watchList, movie]);
+    console.log(watchList);
+  }
+
+  function removeFromWatchList(movie) {
+    setWatchList(watchList.filter((m) => m.id !== movie.id));
+  }
+
   return (
     <div>
       <Router>
@@ -17,7 +28,7 @@ function App() {
             element={
               <>
                 <Banner />
-                <Movies />
+                <Movies addToWatchList={addToWatchList} removeFromWatchList={removeFromWatchList} watchList={watchList} />
               </>
             }
           />
