@@ -1,13 +1,14 @@
 import React from "react";
 
-function MovieCard() {
+function MovieCard({posterPath, name}) {
   return (
-    <div className="h-[40vh] w-[188px] bg-cover bg-center rounded-xl hover:cursor-pointer hover:scale-110 duration-300" style={{backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSABh2wOtmXBgGPA4j4btGIlxUl17JDx97YKY71cZT6k3hwk_aAXmKTohs&s=10')",}}>
-
+    <div className="h-[40vh] w-[200px] bg-center bg-cover rounded-xl hover:scale-110 duration-300 hover:cursor-pointer flex flex-col justify-end items-end" style={{backgroundImage: `url('https://image.tmdb.org/t/p/original/${posterPath}')`}}>
+        <div className="text-white rounded-xl text-xl w-full p-2 text-center bg-gray-900/60">
+            {name}
+        </div>
     </div>
   );
 }
 
 export default MovieCard;
 
-//https://api.themoviedb.org/3/movie/popular?api_key=eb0edbab8bd753584d71b0b25c275cfd&language=en-US&page=2
