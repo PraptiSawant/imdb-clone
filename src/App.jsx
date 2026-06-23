@@ -5,18 +5,29 @@ import Movies from "./components/Movies";
 import WatchList from "./components/WatchList";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Banner from "./components/Banner";
+import { useEffect } from "react";
 
 function App() {
   let [watchList, setWatchList] = useState([]);
 
   function addToWatchList(movie) {
-    setWatchList([...watchList, movie]);
-    console.log(watchList);
+    let newWatchList = [...watchList, movie];
+    localStorage.setItem("watchList", JSON.stringify(newWatchList));
+    setWatchList(newWatchList);
   }
 
   function removeFromWatchList(movie) {
-    setWatchList(watchList.filter((m) => m.id !== movie.id));
+    let newWatchList = watchList.filter((m) => m.id !== movie.id);
+    localStorage.setItem("watchList", JSON.stringify(newWatchList));
+    setWatchList(newWatchList);
   }
+
+  useEffect(() => {
+    let watchListFromLocalStorage = localStorage.getItem("watchList");
+    if (watchListFromLocalStorage) {
+      setWatchList(JSON.parse(watchListFromLocalStorage));
+    }
+  }, []);
 
   return (
     <div>
@@ -32,7 +43,7 @@ function App() {
               </>
             }
           />
-          <Route path="/watchlist" element={<WatchList />} />
+          <Route path="/watchlist" element={<WatchList WatchList={watchList} />} />
         </Routes>
       </Router>
     </div>

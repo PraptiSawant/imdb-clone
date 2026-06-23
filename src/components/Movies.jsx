@@ -30,7 +30,7 @@ function Movies({ addToWatchList, removeFromWatchList, watchList }) {
       <div className="text-2xl m-2 font-bold text-center mb-5">Trending Movies</div>
       <div className="flex flex-row flex-wrap justify-around gap-8">
         {movies.map((movie) => (
-          <MovieCard key={movie.id} posterPath={movie.poster_path} name={movie.original_title} addToWatchList={addToWatchList} removeFromWatchList={removeFromWatchList} movie={movie} watchList={watchList} />
+          <MovieCard key={movie.id} posterPath={movie.poster_path} name={movie.title} addToWatchList={addToWatchList} removeFromWatchList={removeFromWatchList} movie={movie} watchList={watchList} />
         ))}
       </div>
 
