@@ -1,7 +1,14 @@
 import React from "react";
+import { useState } from "react";
 
 function WatchList({ WatchList }) {
-  
+
+  const [searchTerm, setSearchTerm] = useState(""); 
+
+  let handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  }
+
   return (
     <>
       <div className="flex justify-center flex-wrap m-4">
@@ -18,8 +25,11 @@ function WatchList({ WatchList }) {
           type="text"
           placeholder="Search Movies"
           className="h-[3rem] w-[18rem] p-2 text-black bg-gray-200 outline-none"
+          value={searchTerm}
+          onChange={handleSearch}
         />
       </div>
+
       <div className="border border-gray-200 m-5 rounded-lg overflow-hidden">
         <table className="w-full text-gray-500 text-center">
           <thead className="border-b-3 text-gray-800 bg-gray-100">
@@ -31,7 +41,9 @@ function WatchList({ WatchList }) {
             </tr>
           </thead>
           <tbody>
-            {WatchList.map((movie) => (
+            {WatchList.filter((movie) =>
+              movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+            ).map((movie) => (
               <tr key={movie.id}>
                 <td className="flex item-center px-6 py-4">
                   <img
