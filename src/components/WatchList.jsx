@@ -1,8 +1,12 @@
 import React from "react";
 import { useState } from "react";
+import genreIds from "../utility/geners";
+import { useEffect } from "react";
 
-function WatchList({ WatchList, setWatchList }) {
+function WatchList({ WatchList, setWatchList, removeFromWatchList }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [genresList, setGenresList] = useState(["All Genres"]);
+  const [selectedGenre, setSelectedGenre] = useState("All Genres");
 
   let handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -18,15 +22,33 @@ function WatchList({ WatchList, setWatchList }) {
     setWatchList([...sorted]);
   };
 
+  let handleFilter = (genre) => {
+    setSelectedGenre(genre);
+  };
+
+  useEffect(() => {
+    let genreList = WatchList.map((movie) => {
+      return genreIds[movie.genre_ids[0]];
+    });
+    setGenresList(["All Genres", ...genreList]);
+  }, [WatchList]);
+
   return (
     <>
       <div className="flex justify-center flex-wrap m-4">
-        <div className="bg-blue-400 flex justify-center items-center h-[3rem] w-[9rem] rounded-xl text-white font-semibold cursor-pointer mx-4">
-          Action
-        </div>
-        <div className="bg-blue-400 flex justify-center items-center h-[3rem] w-[9rem] rounded-xl text-white font-semibold cursor-pointer">
-          Action
-        </div>
+        {genresList.map((genre) => (
+          <div
+            key={genre}
+            className={`flex justify-center items-center h-[3rem] w-[9rem] rounded-xl font-semibold cursor-pointer mx-4 ${
+              selectedGenre === genre
+                ? "bg-blue-600 text-white"
+                : "bg-gray-400 text-white"
+            }`}
+            onClick={() => handleFilter(genre)}
+          >
+            {genre}
+          </div>
+        ))}
       </div>
 
       <div className="flex justify-center my-4">
@@ -46,11 +68,11 @@ function WatchList({ WatchList, setWatchList }) {
               <th>Name</th>
               <th className="flex justify-center items-center">
                 <div className="p-2" onClick={sortIncreasing}>
-                  <i class="fa-solid fa-arrow-up"></i>
+                  <i className="fa-solid fa-arrow-up"></i>
                 </div>
                 <div className="p-2">Ratings</div>
                 <div className="p-2" onClick={sortDecreasing}>
-                  <i class="fa-solid fa-arrow-down"></i>
+                  <i className="fa-solid fa-arrow-down"></i>
                 </div>
               </th>
               <th className="p-2">Popularity</th>
@@ -58,24 +80,39 @@ function WatchList({ WatchList, setWatchList }) {
             </tr>
           </thead>
           <tbody>
-            {WatchList.filter((movie) =>
-              movie.title.toLowerCase().includes(searchTerm.toLowerCase()),
-            ).map((movie) => (
-              <tr key={movie.id}>
-                <td className="flex item-center px-6 py-4">
-                  <img
-                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                    alt="Movie Poster"
-                    className="h-[6rem] w-[10rem]"
-                  />
-                  <div className="mx-10">{movie.title}</div>
-                </td>
-                <td>{movie.vote_average.toFixed(1)}</td>
-                <td>{movie.vote_count}</td>
-                <td>{movie.genre_ids.join(", ")}</td>
-                <td className="text-red-500 hover:cursor-pointer">Delete</td>
-              </tr>
-            ))}
+            {WatchList.filter((movie) => {
+              if (selectedGenre === "All Genres") {
+                return true;
+              } else {
+                return genreIds[movie.genre_ids[0]] === selectedGenre;
+              }
+            })
+              .filter((movie) =>
+                movie.title.toLowerCase().includes(searchTerm.toLowerCase()),
+              )
+              .map((movie) => (
+                <tr key={movie.id}>
+                  <td className="flex item-center px-6 py-4">
+                    <img
+                      src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                      alt="Movie Poster"
+                      className="h-[6rem] w-[10rem]"
+                    />
+                    <div className="mx-10">{movie.title}</div>
+                  </td>
+                  <td>{movie.vote_average.toFixed(1)}</td>
+                  <td>{movie.vote_count}</td>
+                  <td>{genreIds[movie.genre_ids[0]]}</td>
+                  <td className="text-red-500 hover:cursor-pointer">
+                    <button
+                      onClick={() => removeFromWatchList(movie)}
+                      className="font-bold text-red-800"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

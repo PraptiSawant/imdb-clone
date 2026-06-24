@@ -43,7 +43,7 @@ function App() {
               </>
             }
           />
-          <Route path="/watchlist" element={<WatchList WatchList={watchList} setWatchList={setWatchList} />} />
+          <Route path="/watchlist" element={<WatchList WatchList={watchList} setWatchList={setWatchList} removeFromWatchList={removeFromWatchList} />} />
         </Routes>
       </Router>
     </div>
