@@ -1,13 +1,22 @@
 import React from "react";
 import { useState } from "react";
 
-function WatchList({ WatchList }) {
-
-  const [searchTerm, setSearchTerm] = useState(""); 
+function WatchList({ WatchList, setWatchList }) {
+  const [searchTerm, setSearchTerm] = useState("");
 
   let handleSearch = (event) => {
     setSearchTerm(event.target.value);
-  }
+  };
+
+  let sortIncreasing = () => {
+    let sorted = WatchList.sort((a, b) => a.vote_average - b.vote_average);
+    setWatchList([...sorted]);
+  };
+
+  let sortDecreasing = () => {
+    let sorted = WatchList.sort((a, b) => b.vote_average - a.vote_average);
+    setWatchList([...sorted]);
+  };
 
   return (
     <>
@@ -32,17 +41,25 @@ function WatchList({ WatchList }) {
 
       <div className="border border-gray-200 m-5 rounded-lg overflow-hidden">
         <table className="w-full text-gray-500 text-center">
-          <thead className="border-b-3 text-gray-800 bg-gray-100">
+          <thead className="border-b-3 text-gray-800">
             <tr>
               <th>Name</th>
-              <th>Ratings</th>
+              <th className="flex justify-center items-center">
+                <div className="p-2" onClick={sortIncreasing}>
+                  <i class="fa-solid fa-arrow-up"></i>
+                </div>
+                <div className="p-2">Ratings</div>
+                <div className="p-2" onClick={sortDecreasing}>
+                  <i class="fa-solid fa-arrow-down"></i>
+                </div>
+              </th>
               <th className="p-2">Popularity</th>
               <th className="p-2">Genre</th>
             </tr>
           </thead>
           <tbody>
             {WatchList.filter((movie) =>
-              movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+              movie.title.toLowerCase().includes(searchTerm.toLowerCase()),
             ).map((movie) => (
               <tr key={movie.id}>
                 <td className="flex item-center px-6 py-4">
